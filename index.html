@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galeri Foto Ayang❤️/title>
+    <style>
+      :root {
+        --primary-color: #4a90e2;
+        --background-light: #f5f5f5;
+        --background-dark: #1a1a1a;
+        --text-light: #333;
+        --text-dark: #fff;
+        --card-light: #fff;
+        --card-dark: #2d2d2d;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background-color: var(--background-light);
+        color: var(--text-light);
+      }
+
+      body.dark-mode {
+        background-color: var(--background-dark);
+        color: var(--text-dark);
+      }
+
+      body {
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; /* Ubah menjadi flex-start agar konten dimulai dari atas */
+        min-height: 100vh; /* Pastikan minimum tinggi adalah 100% viewport */
+      }
+
+      .header {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        color: #ff4d4d;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        color: #555;
+        margin: 0;
+      }
+
+      .header p:after {
+        content: " ❤️";
+        color: #ff4d4d;
+        font-size: 1.5rem;
+      }
+
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .upload-section {
+        background: var(--card-light);
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 600px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transform: translateY(0);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .dark-mode .upload-section {
+        background: var(--card-dark);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .upload-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .upload-button {
+        background: var(--primary-color);
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 15px 0;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+      }
+
+      .upload-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+      }
+
+      .upload-button:active::after {
+        animation: ripple 0.6s ease-out;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 25px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .gallery-item {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        background: var(--card-light);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .dark-mode .gallery-item {
+        background: var(--card-dark);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.1);
+      }
+
+      .gallery-item .caption {
+        padding: 15px;
+        text-align: center;
+        font-size: 0.9em;
+        color: var(--text-light);
+      }
+
+      .dark-mode .gallery-item .caption {
+        color: var(--text-dark);
+      }
+
+      .delete-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 59, 48, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 0.3s, transform 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .gallery-item:hover .delete-button {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .delete-button:hover {
+        background: rgba(255, 59, 48, 1);
+        transform: scale(1.1);
+      }
+
+      .status-message {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: 500;
+        animation: slideUp 0.3s ease-out;
+        z-index: 1000;
+      }
+
+      .status-message.success {
+        background: rgba(46, 213, 115, 0.95);
+        color: white;
+        box-shadow: 0 5px 15px rgba(46, 213, 115, 0.3);
+      }
+
+      .status-message.error {
+        background: rgba(255, 71, 87, 0.95);
+        color: white;
+        box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 30px;
+        font-size: 18px;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .dark-mode .loading {
+        color: var(--text-dark);
+      }
+
+      .loading::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--primary-color);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(0, 0);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(100, 100);
+          opacity: 0;
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .gallery {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+
+        .upload-section {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+    <div class="header">
+      <h1>Galeri Foto Ayang❤️</h1>
+      <p>Hai ayang, kamu adalah inspirasiku untuk tersenyum setiap hari. 😘</p>
+    </div>
+
+    <div class="upload-section">
+      <h2>Unggah Foto</h2>
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+        multiple
+        style="display: none"
+      />
+      <button
+        class="upload-button"
+        onclick="document.getElementById('fileInput').click()"
+      >
+        Pilih Foto
+      </button>
+      <p>Format yang didukung: JPG, PNG, GIF</p>
+      <div id="statusMessage"></div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none">Memuat foto...</div>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+      // Tema gelap/terang
+      function toggleTheme() {
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem(
+          "darkMode",
+          document.body.classList.contains("dark-mode")
+        );
+      }
+
+      // Check saved theme preference
+      if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+
+      // Database code (sama seperti sebelumnya)
+      let db;
+      const DBName = "PhotoGalleryDB";
+      const DBVersion = 1;
+      const storeName = "photos";
+
+      const request = indexedDB.open(DBName, DBVersion);
+
+      request.onerror = function (event) {
+        showStatus("Error membuka database: " + event.target.error, true);
+      };
+
+      request.onupgradeneeded = function (event) {
+        db = event.target.result;
+        if (!db.objectStoreNames.contains(storeName)) {
+          db.createObjectStore(storeName, {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+        }
+      };
+
+      request.onsuccess = function (event) {
+        db = event.target.result;
+        loadPhotos();
+      };
+
+      function showStatus(message, isError = false) {
+        const statusDiv = document.getElementById("statusMessage");
+        statusDiv.className =
+          "status-message " + (isError ? "error" : "success");
+        statusDiv.textContent = message;
+        setTimeout(() => {
+          statusDiv.textContent = "";
+          statusDiv.className = "";
+        }, 3000);
+      }
+
+      function loadPhotos() {
+        document.getElementById("loading").style.display = "block";
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = "";
+
+        const transaction = db.transaction([storeName], "readonly");
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.getAll();
+
+        request.onsuccess = function (event) {
+          const photos = event.target.result;
+          photos.forEach((photo) => {
+            const galleryItem = createGalleryItem(photo);
+            gallery.appendChild(galleryItem);
+          });
+          document.getElementById("loading").style.display = "none";
+        };
+
+        request.onerror = function (event) {
+          showStatus("Error memuat foto: " + event.target.error, true);
+          document.getElementById("loading").style.display = "none";
+        };
+      }
+
+      function createGalleryItem(photo) {
+        const galleryItem = document.createElement("div");
+        galleryItem.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = photo.data;
+        img.alt = photo.name;
+        img.loading = "lazy"; // Lazy loading for better performance
+
+        const caption = document.createElement("div");
+        caption.className = "caption";
+        caption.textContent = photo.name;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-button";
+        deleteButton.innerHTML = "×";
+        deleteButton.onclick = (e) => {
+          e.stopPropagation();
+          deletePhoto(photo.id);
+        };
+
+        galleryItem.appendChild(img);
+        galleryItem.appendChild(caption);
+        galleryItem.appendChild(deleteButton);
+
+        return galleryItem;
+      }
+
+      function deletePhoto(id) {
+        if (confirm("Apakah Anda yakin ingin menghapus foto ini?")) {
+          const transaction = db.transaction([storeName], "readwrite");
+          const objectStore = transaction.objectStore(storeName);
+          const request = objectStore.delete(id);
+
+          request.onsuccess = function () {
+            showStatus("Foto berhasil dihapus");
+            loadPhotos();
+          };
+
+          request.onerror = function (event) {
+            showStatus("Error menghapus foto: " + event.target.error, true);
+          };
+        }
+      }
+
+      fileInput.addEventListener("change", function (e) {
+        const files = e.target.files;
+        let processed = 0;
+
+        for (let file of files) {
+          if (file.type.startsWith("image/")) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const transaction = db.transaction([storeName], "readwrite");
+              const objectStore = transaction.objectStore(storeName);
+
+              const photo = {
+                name: file.name,
+                type: file.type,
+                data: e.target.result,
+                date: new Date(),
+              };
+
+              const request = objectStore.add(photo);
+
+              request.onsuccess = function () {
+                processed++;
+                if (processed === files.length) {
+                  showStatus("Semua foto berhasil diunggah");
+                  loadPhotos();
+                }
+              };
+
+              request.onerror = function (event) {
+                showStatus(
+                  "Error mengunggah foto: " + event.target.error,
+                  true
+                );
+              };
+            };
+
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+
+      // Tambahkan fitur lightbox untuk preview foto
+      document.addEventListener("click", function (e) {
+        if (
+          e.target.tagName === "IMG" &&
+          e.target.parentElement.classList.contains("gallery-item")
+        ) {
+          const lightbox = document.createElement("div");
+          lightbox.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    cursor: zoom-out;
+                `;
+
+          const img = document.createElement("img");
+          img.src = e.target.src;
+          img.style.cssText = `
+                    max-width: 90%;
+                    max-height: 90vh;
+                    object-fit: contain;
+                    transform: scale(0.9);
+                    transition: transform 0.3s ease;
+                `;
+
+          lightbox.appendChild(img);
+          document.body.appendChild(lightbox);
+
+          setTimeout(() => {
+            img.style.transform = "scale(1)";
+          }, 50);
+
+          lightbox.addEventListener("click", function () {
+            img.style.transform = "scale(0.9)";
+            setTimeout(() => {
+              lightbox.remove();
+            }, 300);
+          });
+        }
+      });
+
+      // Tambahkan fitur drag and drop
+      const dropZone = document.querySelector(".upload-section");
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight(e) {
+        dropZone.classList.add("highlight");
+        dropZone.style.transform = "scale(1.02)";
+        dropZone.style.borderColor = "#4a90e2";
+      }
+
+      function unhighlight(e) {
+        dropZone.classList.remove("highlight");
+        dropZone.style.transform = "";
+        dropZone.style.borderColor = "";
+      }
+
+      dropZone.addEventListener("drop", handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        handleFiles(files);
+      }
+
+      function handleFiles(files) {
+        if (files.length > 0) {
+          const event = { target: { files: files } };
+          fileInput.files = files;
+          fileInput.dispatchEvent(new Event("change"));
+        }
+      }
+    </script>
+  </body>
+</html>
